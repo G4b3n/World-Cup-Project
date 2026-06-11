@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>2026 World Cup Knockout Stage</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: darkcyan;
+            color: white;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 40px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            text-align: center;
+            font-size: 32px;
+        }
+        .bracket-container {
+          display: flex;
+          justify-content: center;
+          padding: 20px;
+          gap: 15px;
+              
+          /* ADD THESE LINES */
+          overflow-x: auto;            /* Enables horizontal scroll */
+          -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling for iOS */
+          width: 100%;                 /* Ensures it doesn't exceed screen width */
+        }
+        .bracket-section {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .bracket-column {
+            display: grid;
+            grid-template-rows: repeat(33, auto);
+            gap: 4px; /* Added a little more space between matches */
+            min-height: 1600px;
+            min-width: 250px; /* Increased from 200px to give text room */
+        }
+        .column-label {
+            grid-row: 1;
+            text-align: center;
+            font-weight: bold;
+            font-size: 28px;
+            color: white;
+            padding: 40px 0;
+            height: 20px;
+        }
+        .match {
+            border: none;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 4px; /* Added padding inside the match box */
+            display: flex;
+            flex-direction: column;
+        }
+        .team-entry {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-height: 24px;
+        }
+        .team-entry:last-child {
+            border-bottom: none;
+        }
+        .team-entry input {
+            width: 30px; /* Slightly smaller inputs */
+            padding: 2px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #333;
+            border-radius: 3px;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px; /* Slightly smaller text so it fits */
+        }
+        /* Remove spinner arrows from number inputs */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .team-name {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px; /* Adjusted to fit better */
+            padding: 0 5px;
+        }
+        .divider-center {
+            width: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            min-height: 1600px;
+        }
+       @media (max-width: 768px) {
+          .bracket-container {
+              justify-content: flex-start; /* Forces the swipe to start from the left */
+              padding: 10px;
+          }
+          /* Optional: Slightly reduce the side padding of the bracket 
+            if it feels too cramped on mobile */
+          .bracket-column {
+              min-width: 180px; /* Slightly tighter on mobile to show more columns at once */
+          }
+        }
+    </style>
+  <header class="page-header">
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-link">Group Stage</a>
+      <a href="KnockoutStage.html" class="nav-link">Knockout Stage</a>
+    </nav>
+  </header>
+    <div class="bracket-container" id="bracket"></div>
+
+<script>
+    function createMatch() {
+        const div = document.createElement('div');
+        div.className = 'match';
+        div.innerHTML = `
+            <div class="team-entry">
+                <input type="number" placeholder="G" min="0" max="99">
+                <input type="number" placeholder="V" min="0" max="99">
+                <span class="team-name" contenteditable="true">Team 1</span>
+                <input type="number" placeholder="R" min="0" max="99">
+            </div>
+            <div class="team-entry">
+                <input type="number" placeholder="G" min="0" max="99">
+                <input type="number" placeholder="V" min="0" max="99">
+                <span class="team-name" contenteditable="true">Team 2</span>
+                <input type="number" placeholder="R" min="0" max="99">
+            </div>
+        `;
+        return div;
+    }
+
+    function createBracketColumn(roundName, matchCount, startRow, rowSpan) {
+        const column = document.createElement('div');
+        column.className = 'bracket-column';
+        const label = document.createElement('div');
+        label.className = 'column-label';
+        label.textContent = roundName;
+        column.appendChild(label);
+
+        for (let i = 0; i < matchCount; i++) {
+            const match = createMatch();
+            match.style.gridRow = `${startRow + i * rowSpan} / span ${rowSpan}`;
+            column.appendChild(match);
+        }
+        return column;
+    }
+    const bracket = document.getElementById('bracket');
+
+    // LEFT SIDE
+    const leftSection = document.createElement('div');
+    leftSection.className = 'bracket-section';
+    leftSection.appendChild(createBracketColumn('Round of 32', 16, 2, 2));
+    leftSection.appendChild(createBracketColumn('Round of 16', 8, 3, 4));
+    leftSection.appendChild(createBracketColumn('Quarterfinals', 4, 5, 8));
+    leftSection.appendChild(createBracketColumn('Semifinals', 2, 9, 16));
+    bracket.appendChild(leftSection);
+
+    // CENTER DIVIDER
+    const divider = document.createElement('div');
+    divider.className = 'divider-center';
+    bracket.appendChild(divider);
+
+    // FINAL - CENTERED
+    const finalColumn = createBracketColumn('Final', 1, 16, 2);
+    bracket.appendChild(finalColumn);
+
+    // CENTER DIVIDER
+    const divider2 = document.createElement('div');
+    divider2.className = 'divider-center';
+    bracket.appendChild(divider2);
+
+    // RIGHT SIDE
+    const rightSection = document.createElement('div');
+    rightSection.className = 'bracket-section';
+    rightSection.appendChild(createBracketColumn('Semifinals', 2, 9, 16));
+    rightSection.appendChild(createBracketColumn('Quarterfinals', 4, 5, 8));
+    rightSection.appendChild(createBracketColumn('Round of 16', 8, 3, 4));
+    rightSection.appendChild(createBracketColumn('Round of 32', 16, 2, 2));
+    bracket.appendChild(rightSection);
+
+    function handleMobileLayout() {
+        const matches = document.querySelectorAll('.match');
+        if (window.innerWidth <= 768) {
+            matches.forEach(m => m.style.gridRow = 'unset');
+        } else {
+            // Re-apply if necessary or just let the desktop CSS handle it
+        }
+    }
+
+    // Run on load and whenever the screen is resized
+    window.addEventListener('resize', handleMobileLayout);
+    handleMobileLayout(); // Initial check
+</script>
+</body>
+</html>
