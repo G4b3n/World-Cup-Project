@@ -1,0 +1,128 @@
+body{
+  background-color: darkcyan;
+  padding: 0px;
+  margin: 0px;
+}
+
+.page-header {
+  color: white;
+  border: none;
+}
+
+.page-header a{
+  font-size: 40px;
+  text-decoration: underline;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.GroupStage {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.group-container {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.group-title {
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  text-align: center;
+}
+
+.bracket-table {
+  border-collapse: collapse;
+  width: auto;
+  max-width: fit-content;
+}
+
+.bracket-table tr:first-child {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+}
+
+.bracket-table td {
+  border: 1px solid white;
+  padding: 10px 16px;
+  text-align: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.bracket-table tr:first-child td {
+  padding: 6px 8px;
+}
+
+.bracket-table tr:not(:first-child) td {
+  padding: 5px 8px;
+}
+
+.group-input {
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  width: 100%;
+  padding: 0;
+}
+
+.group-input:focus {
+  outline: none;
+}
+
+@media (max-width: 1400px) {
+  .GroupStage {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .GroupStage {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .GroupStage {
+    grid-template-columns: 1fr;
+  }
+}
