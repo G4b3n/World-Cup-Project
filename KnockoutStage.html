@@ -146,36 +146,42 @@
     <div class="bracket-container" id="bracket"></div>
 
 <script>
-    function createMatch() {
+    // Add an index parameter
+    function createMatch(matchIndex) {
         const div = document.createElement('div');
         div.className = 'match';
         div.innerHTML = `
             <div class="team-entry">
-                <input type="number" placeholder="G" min="0" max="99">
-                <input type="number" placeholder="V" min="0" max="99">
-                <span class="team-name" contenteditable="true">Team 1</span>
-                <input type="number" placeholder="R" min="0" max="99">
+                <input type="number" id="m${matchIndex}_t1_g" placeholder="G">
+                <input type="number" id="m${matchIndex}_t1_v" placeholder="V">
+                <span class="team-name" id="m${matchIndex}_t1_name" contenteditable="true">Team 1</span>
+                <input type="number" id="m${matchIndex}_t1_r" placeholder="R">
             </div>
             <div class="team-entry">
-                <input type="number" placeholder="G" min="0" max="99">
-                <input type="number" placeholder="V" min="0" max="99">
-                <span class="team-name" contenteditable="true">Team 2</span>
-                <input type="number" placeholder="R" min="0" max="99">
+                <input type="number" id="m${matchIndex}_t2_g" placeholder="G">
+                <input type="number" id="m${matchIndex}_t2_v" placeholder="V">
+                <span class="team-name" id="m${matchIndex}_t2_name" contenteditable="true">Team 2</span>
+                <input type="number" id="m${matchIndex}_t2_r" placeholder="R">
             </div>
         `;
         return div;
     }
 
+        // Keep a global counter
+    let matchCounter = 0; 
+
     function createBracketColumn(roundName, matchCount, startRow, rowSpan) {
         const column = document.createElement('div');
         column.className = 'bracket-column';
+
         const label = document.createElement('div');
         label.className = 'column-label';
         label.textContent = roundName;
         column.appendChild(label);
 
         for (let i = 0; i < matchCount; i++) {
-            const match = createMatch();
+            // Pass the counter and increment it
+            const match = createMatch(matchCounter++); 
             match.style.gridRow = `${startRow + i * rowSpan} / span ${rowSpan}`;
             column.appendChild(match);
         }
@@ -227,6 +233,29 @@
     // Run on load and whenever the screen is resized
     window.addEventListener('resize', handleMobileLayout);
     handleMobileLayout(); // Initial check
+
+    // Add this to the bottom of your script
+    const inputs = document.querySelectorAll('input, span[contenteditable="true"]');
+
+    // Function to initialize storage
+    function initStorage() {
+        // 1. Load: Restore data when the page loads
+        document.querySelectorAll('input, .team-name').forEach(el => {
+            const savedValue = localStorage.getItem(el.id);
+            if (savedValue !== null) {
+                if (el.tagName === 'INPUT') el.value = savedValue;
+                else el.textContent = savedValue;
+            }
+
+            // 2. Save: Save data when the user types
+            el.addEventListener('input', (e) => {
+                const val = e.target.tagName === 'INPUT' ? e.target.value : e.target.textContent;
+                localStorage.setItem(e.target.id, val);
+            });
+        });
+    }
+    // Run this AFTER you have finished building the bracket
+    initStorage();
 </script>
 </body>
 </html>
