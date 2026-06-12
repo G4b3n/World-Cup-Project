@@ -109,6 +109,27 @@ body{
   outline: none;
 }
 
+.match-date { margin: 10px 0; padding: 0; text-align: center; color: white; font-family: Arial; font-size: 20px; }
+.matchups-wrapper { margin: 10px 0; max-width: 100%; padding: 0 10px; }
+.matchups-header { text-align: center; margin: 10px 0; border-bottom: 5px solid white; padding: 0; color: white; font-family: Arial; font-size: 40px; }
+.matchups-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+.match-card { background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; }
+/*match-date*/
+.team-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 2px 0; color: white; font-family: Arial; font-size: 20px; }
+.res-box, .pred-box { width: 30px; padding: 2px; text-align: center; }
+/* RESPONSIVE: Adjust for smaller screens */
+@media (max-width: 1200px) {
+    .matchups-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .matchups-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 1400px) {
   .GroupStage {
     grid-template-columns: repeat(4, 1fr);
